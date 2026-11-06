@@ -1,0 +1,31 @@
+name: Python checks
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Install uv and Python
+        uses: astral-sh/setup-uv@07a047e608db84b3d8c06cd9a7c7dcc9c355c18e
+        with:
+          version: "0.13.4"
+          python-version: "3.12"
+          enable-cache: true
+      - name: Install locked dependencies
+        run: uv sync --frozen --python 3.12
+      - name: Ruff
+        run: uv run --frozen ruff check .
+      - name: Formatting
+        run: uv run --frozen ruff format --check .
+      - name: Strict typing
+        run: uv run --frozen python -B -m mypy --strict
+      - name: Tests
+        run: uv run --frozen python -B -m pytest

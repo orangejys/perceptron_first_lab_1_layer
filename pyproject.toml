@@ -1,0 +1,44 @@
+[build-system]
+requires = ["hatchling>=1.26"]
+build-backend = "hatchling.build"
+
+[project]
+name = "perceptron-lab-2026"
+version = "1.0.0"
+description = "Учебный бинарный перцептрон: синтетические данные, Iris и визуализация"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "matplotlib>=3.9,<4",
+]
+
+[project.scripts]
+perceptron = "perceptron_lab.cli:main"
+
+[dependency-groups]
+dev = [
+    "mypy>=1.13,<2",
+    "pytest>=8.3,<10",
+    "ruff>=0.9,<1",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["perceptron_lab"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra -p no:cacheprovider"
+
+[tool.ruff]
+target-version = "py312"
+line-length = 88
+cache-dir = ".venv/.ruff_cache"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "D100", "D104"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+cache_dir = ".venv/.mypy_cache"
+files = ["perceptron_lab", "tests", "perceptron.py"]
